@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import path
-from django.contrib.auth import views as auth_views  # <-- Safe authentication view toolkit
-from billing.views import checkout_view, process_transaction
+from django.urls import path, include
+from django.shortcuts import redirect
+from django.contrib.auth import views as auth_views  
 from management.views import admin_dashboard, portal_router_view, home_view
 
 urlpatterns = [
@@ -13,9 +13,8 @@ urlpatterns = [
     # 2. Automated Traffic Role-Router (Handles portal redirection after login)
     path('portal-router/', portal_router_view, name='portal_router'),
     
-    # 3. Core Operational Portals
-    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
-    path('admin/', admin.site.urls),
-    path('billing/', checkout_view, name='billing_checkout'),
-    path('billing/checkout/process/', process_transaction, name='process_transaction'),
+    # 3. Core Operational Portals (Cleanly grouped via App routing namespaces)
+    path('management/', include('management.urls', namespace='management')),
+    path('billing/', include('billing.urls', namespace='billing')), # Handles checkout and transaction processing endpoints
+    path('admin/', admin.site.urls), # Standard Django backend manager
 ]

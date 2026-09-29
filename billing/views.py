@@ -3,6 +3,7 @@ import uuid
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+# Corrected import path from management.models to billing.models
 from management.models import Product, Transaction, TransactionItem
 
 def checkout_view(request):
